@@ -1,0 +1,62 @@
+{% set fieldTypes = entry.formBuilder
+    .with(
+        ['text'],
+        ['email'],
+        ['tel'],
+        ['date'],
+        ['file'],
+        ['options'],
+        ['textarea'],
+        ['location']
+    )
+    .all() %}
+
+
+<section>
+	<div>
+		<div class="container">
+
+			{% if fieldTypes|length %}
+
+				{% macro errorList(errors) %}
+					{% if errors %}
+						{{ ul(errors, {class: 'errors'}) }}
+					{% endif %}
+				{% endmacro %}
+
+				{% set message = message ?? null %}
+
+				<div class="form-container">
+					<form id="contact-form" method="post" action="" accept-charset="UTF-8">
+						{{ csrfInput() }}
+						{{ actionInput('contact-form/send') }}
+						{# redirect on submit #}
+						{{ redirectInput('thank-you') }}
+
+						{% for fieldType in fieldTypes %}
+							{% include "fields/" ~ fieldType.type with { message: message } %}
+						{% endfor %}
+
+						{# contact form honeypot #}
+						<input id="wahlpot" name="wahlpot" type="text">
+
+
+						{% if craft.app.session.hasFlash('notice') %}
+							<p class="message notice">
+								{{ craft.app.session.getFlash('notice') }}</p>
+						{% elseif craft.app.session.hasFlash('error') %}
+							<p class="message error">{{ craft.app.session.getFlash('error') }}</p>
+						{% endif %}
+
+						<div class="button-container">
+							<button id="submit" type="submit" class="normal primary-button">Submit</button>
+						</div>
+
+					</form>
+				</div>
+			{% endif %}
+
+
+		</div>
+	</div>
+</section>

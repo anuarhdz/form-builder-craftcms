@@ -1,0 +1,37 @@
+{% set options = fieldType.options %}
+{% set label = fieldType.label|upper %}
+{% set id = fieldType.fieldName|kebab %}
+{% set width = fieldType.width %}
+{% set name = 'message['~ fieldType.label|replace(' *', '') ~ ']' %}
+{% if fieldType.required %}
+	{% set isrequired = true %}
+{% else %}
+	{% set isrequired = false %}
+{% endif %}
+
+{% if width == '100%' %}
+	{% set formrowclass = 'form-row full' %}
+{% else %}
+	{% set formrowclass = 'form-row full-mobile' %}
+{% endif %}
+
+{% tag 'div' with {
+    class: formrowclass
+} %}
+{% tag 'label' with {
+    class: 'h2 form-label',
+    for: id
+} %}
+{{ label }}
+{% tag 'select' with {
+    id: id,
+    name: name,
+    required: isrequired
+} %}
+{% for option in options %}
+	<option value="{{ option.value }}">{{ option.option }}</option>
+{% endfor %}
+
+{% endtag %}
+{% endtag %}
+{% endtag %}

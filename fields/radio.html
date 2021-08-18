@@ -1,0 +1,61 @@
+{% set label = fieldType.label|upper %}
+{% set id = fieldType.fieldName|kebab %}
+{% set width = fieldType.width %}
+{% set class = 'h2 form-label' %}
+{% set labelclass = 'label-container ' ~ class %}
+{% set name = 'message['~ fieldType.label|replace(' *', '') ~ '][]' %}
+{% if fieldType.required %}
+	{% set isrequired = true %}
+{% else %}
+	{% set isrequired = false %}
+{% endif %}
+
+{% if width == '100%' %}
+	{% set formrowclass = 'form-row full' %}
+{% else %}
+	{% set formrowclass = 'form-row full-mobile' %}
+{% endif %}
+
+
+{% tag 'div' with {
+    class: formrowclass } %}
+{% tag 'p' with {
+    class: class
+} %}
+{{ label }}
+{% endtag %}
+{% tag 'label' with {
+                    class: labelclass,
+                    for: id ~ '-yes-option'
+                } %}
+<span>Yes</span>
+{% tag 'div' with {
+            class: 'input input-box'
+        } %}
+{{ input('radio', name, 'no', {
+    id: id ~ '-yes-option',
+    required: isrequired
+}) }}
+<i></i>
+{% endtag %}
+{% endtag %}
+
+{% tag 'label' with {
+    class: labelclass,
+    for: id ~ '-no-option'
+} %}
+<span>No</span>
+{% tag 'div' with {
+            class: 'input input-box'
+        } %}
+{{ input('radio', name, 'yes', {
+    id: id ~ '-no-option',
+    required: isrequired
+}) }}
+<i></i>
+{% endtag %}
+{% endtag %}
+{{ message ? _self.errorList(message.getErrors(name)) }}
+
+
+{% endtag %}

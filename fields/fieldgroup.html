@@ -1,0 +1,51 @@
+{% set groupName = fieldType.groupTitle|kebab %}
+{% set fields = fieldType.fieldsData %}
+{% macro errorList(errors) %}
+	{% if errors %}
+		{{ ul(errors, {class: 'errors'}) }}
+	{% endif %}
+{% endmacro %}
+
+
+{% tag 'div' with {
+    id: groupName,
+    class: groupName ~ ' fieldgroup',
+} %}
+{% tag 'h4' with {
+    class: 'form-subheader'
+    } %}
+{{ fieldType.groupTitle }}
+{% endtag %}
+
+{% for field in fields %}
+	{% set label = field.label %}
+	{% set id = field.fieldName|kebab %}
+	{% set width = field.width %}
+	{% set class = 'h2 form-label' %}
+	{% set forAttr = 'for-' ~ id %}
+	{% if width == '100%' %}
+		{% set formrowclass = 'form-row full' %}
+	{% else %}
+		{% set formrowclass = 'form-row full-mobile' %}
+	{% endif %}
+
+	{% tag 'div' with {
+    class: formrowclass } %}
+
+	{% tag 'label' with {
+        class: class,
+        for: id
+    } %}
+	{{ label }}
+	{{ input('text', forAttr, '', {
+            id: id
+        }) }}
+	{% endtag %}
+	{% endtag %}
+	{{ message ? _self.errorList(message.getErrors(id)) }}
+
+{% endfor %}
+<output class="output"></output>
+<button id="add-{{ groupName }}" class="normal primary-button green">{{ fieldType.buttonLabel }}</button>
+
+{% endtag %}

@@ -1,0 +1,39 @@
+{% macro errorList(errors) %}
+	{% if errors %}
+		{{ ul(errors, {class: 'errors'}) }}
+	{% endif %}
+{% endmacro %}
+
+
+{% set label = fieldType.label|upper %}
+{% set id = fieldType.fieldName|kebab %}
+{% set width = fieldType.width %}
+{% set name = 'message['~ fieldType.label|replace(' *', '') ~ ']' %}
+{% if fieldType.required %}
+	{% set isrequired = true %}
+{% else %}
+	{% set isrequired = false %}
+{% endif %}
+{% if width == '100%' %}
+	{% set formrowclass = 'form-row full' %}
+{% else %}
+	{% set formrowclass = 'form-row full-mobile' %}
+{% endif %}
+
+
+{% tag 'div' with {
+    class: formrowclass } %}
+
+{% tag 'label' with {
+    class: 'h2 form-label',
+        for: id,
+            } %}
+{{ label }}
+{{ input('tel', name, '', {
+    id: id,
+    required: isrequired
+}) }}
+{{ message ? _self.errorList(message.getErrors(id)) }}
+
+{% endtag %}
+{% endtag %}

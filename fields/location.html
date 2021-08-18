@@ -1,0 +1,51 @@
+{% set locations = craft.entries()
+    .section('locationDetails')
+    .all() %}
+{% set label = fieldType.label|upper %}
+{% set id = fieldType.fieldName|kebab %}
+{% set width = fieldType.width %}
+{% set name = 'message['~ fieldType.label|replace(' *', '') ~ ']' %}
+{% if fieldType.required %}
+	{% set isrequired = true %}
+{% else %}
+	{% set isrequired = false %}
+{% endif %}
+
+{% if width == '100%' %}
+	{% set formrowclass = 'form-row full' %}
+{% else %}
+	{% set formrowclass = 'form-row full-mobile' %}
+{% endif %}
+
+{% tag 'div' with {
+    class: formrowclass
+} %}
+{% tag 'label' with {
+	class: 'h2 form-label',
+    for: id
+} %}
+{{ label }}
+{% tag 'select' with {
+    id: id,
+    name: name,
+	required: isrequired,
+	value: ''
+} %}
+{% for location in locations %}
+	{% if location.type == 'country' %}
+		<optgroup label="{{ location.title }}">
+		{% elseif location.type == 'store' %}
+			<option value="{{ location.title }}">
+				{{ location.title|capitalize }}
+				-
+				{{ location.parent|capitalize }}
+			</option>
+		{% endif %}
+		{% if location.type == 'country' %}
+		</optgroup>
+	{% endif %}
+{% endfor %}
+
+{% endtag %}
+{% endtag %}
+{% endtag %}

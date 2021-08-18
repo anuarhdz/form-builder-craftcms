@@ -1,0 +1,35 @@
+{% macro errorList(errors) %}
+	{% if errors %}
+		{{ ul(errors, {class: 'errors'}) }}
+	{% endif %}
+{% endmacro %}
+
+
+{% set label = fieldType.label|upper %}
+{% set id = fieldType.fieldName|kebab %}
+{% set width = fieldType.width %}
+
+
+{% if width == '100%' %}
+	{% set formrowclass = 'form-row full' %}
+{% else %}
+	{% set formrowclass = 'form-row full-mobile' %}
+{% endif %}
+
+
+{% tag 'div' with {
+    class: formrowclass } %}
+
+{% tag 'label' with {
+    class: 'h2 form-label',
+    for: id,
+} %}
+{{ label }}
+{{ input('email', 'fromEmail', '', {
+    id: id,
+    required: true
+}) }}
+{{ message ? _self.errorList(message.getErrors(name)) }}
+
+{% endtag %}
+{% endtag %}
